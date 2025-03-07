@@ -1,0 +1,50 @@
+
+{
+    "compilerOptions": {
+      "lib": ["es2021"],
+      "target": "es2017",
+      "module": "commonjs",
+      "strict": false,
+      "esModuleInterop": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "skipLibCheck": true,
+      "strictPropertyInitialization": false,
+      "forceConsistentCasingInFileNames": true,
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "sourceMap": true
+     
+
+    },
+     "include": [
+       "src/**/*.ts"
+     ],
+     "exclude": [
+       "node_modules"
+    ]
+  }
+
+
+
+
+
+// {
+//     "compilerOptions": {
+//         "lib": ["ESNext"],
+//         "target": "ES6",
+//         "types": ["node","graphql-upload"],
+//         "module": "NodeNext",
+//         "baseUrl": ".",
+//         "outDir": "dist",
+//         "esModuleInterop": true,
+//         "emitDecoratorMetadata": true,
+//         "experimentalDecorators": true,
+//         "allowJs": true,
+//         "maxNodeModuleJsDepth": 10,
+//         "typeRoots": ["node_modules/@types", "custom_typings"]
+
+//     },
+//     "include": ["src/**/*"],
+//     "exclude": ["node_modules"]
+// }
