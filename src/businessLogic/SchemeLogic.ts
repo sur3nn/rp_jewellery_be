@@ -13,9 +13,9 @@ export class SchemeLogic{
             from gold_scheme gs ;
             `
           ) 
-          console.log("data",data);
-           
-          console.log("hii suresh bro");
+          console.log("hi bro0,",data);
+          console.log("hi bro0,");
+          
           
           return data;
         } catch (error) {
@@ -32,9 +32,10 @@ export class SchemeLogic{
             throw error;
         }
     }
-    public async schemeUser(yearId : number,monthId : number){
+    public async paymentDetails(yearId : number,monthId : number){
         try {
             let paymentList = []
+            let isAvailable = 1;
             let year : number = yearId
             for (let i=monthId ; i<=12 ; i++){
                 console.log("monthID",monthId);
@@ -44,26 +45,18 @@ export class SchemeLogic{
                 if(paymentList.length > 10){
                     break;
                 }
-                // if(i > 12){
-                //     i = 1;
-                //     payment.yearId = yearId + 1
-                // }else{
-                //     payment.yearId = yearId
-                // }
-               console.log(year,"as");
-               
                 let payment = {
                     MonthId : i,
                     yearId : year,
-                    isPaid : 0
+                    isPaid : 0,
+                    isAvailable : isAvailable
                 }
                 if(i >= 12){
                     i=0;
-                     year++;
-                    console.log(year);
-                    
+                     year++; 
+                     
                 }
-
+                isAvailable = 0 
               
                 paymentList.push(payment);
             }
@@ -73,14 +66,70 @@ export class SchemeLogic{
             throw error;
         }
     }
-    public async saveSchemeUser(reqbody : any){
+    public async validateSchemeUser(userId : number){
         try {
-            // const schemeUserData = new SchemeUserMapping()
-            // schemeUserData.goldSchemeId = reqbody.schemeId,
-            // schemeUserData.userId = reqbody.userId,
-
+            const data = await AppDataSource.manager.findOne(SchemeUserMapping,
+                {
+                    where : {
+                        userId : userId
+                    }
+                }
+                
+            )
+            return data;
         } catch (error) {
+            throw error;
+        }
+    }
+    public async schemeUser(reqbody : any){
+        try {
+            const payment = await this.paymentDetails(reqbody.yearId,reqbody.monthId)
+            const schemeUserData = new SchemeUserMapping()
+            schemeUserData.goldSchemeId = reqbody.schemeId,
+            schemeUserData.userId = reqbody.userId,
+            schemeUserData.paymentDetails = payment,
+            schemeUserData.createdBy = "1";
+            await AppDataSource.manager.save(schemeUserData);
+            return schemeUserData;
+        } catch (error) {
+            throw error;
+        }
+    }
+    public async schemePaid(reqbody : any){
+        try {
+            console.log("req",reqbody);
+            const { userId, paymentData} : any = reqbody;
+ 
+            let existingUser = await this.validateSchemeUser(userId);
+            if(existingUser){
+                const schmeUser =  AppDataSource.getRepository(SchemeUserMapping)
+                const data = await schmeUser.update({userId : userId},{
+                    paymentDetails : paymentData
+                })
+                return "Scheme Paid Succesfully";
+            }else{
+                return "User Not Found"
+
+            }
             
+           
+            
+        } catch (error) {
+            throw error;
+        }
+    }
+    public async userSchemeData(userId : number){
+        try {
+            const data = await AppDataSource.manager.query(`
+                select gs.name ,gs.amount ,sum2.payment_details 
+                from scheme_user_mapping sum2 
+                join gold_scheme gs 
+                on gs.id = sum2.gold_scheme_id 
+                where  sum2.user_id = ${userId} and sum2.deleted_on is null;
+                `)
+            return data[0]
+        } catch (error) {
+            throw error;
         }
     }
 }

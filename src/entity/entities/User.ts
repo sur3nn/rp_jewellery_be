@@ -5,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { UserOrderHistory } from "./UserOrderHistory";
 import { ViewCart } from "./ViewCart";
 
 @Index("uniqueKey", ["uniqueKey"], { unique: true })
@@ -53,6 +54,12 @@ export class User {
 
   @Column("varchar", { name: "fcm_token", nullable: true, length: 255 })
   fcmToken: string | null;
+
+  @OneToMany(
+    () => UserOrderHistory,
+    (userOrderHistory) => userOrderHistory.user
+  )
+  userOrderHistories: UserOrderHistory[];
 
   @OneToMany(() => ViewCart, (viewCart) => viewCart.user)
   viewCarts: ViewCart[];

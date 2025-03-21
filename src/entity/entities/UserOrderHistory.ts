@@ -6,13 +6,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { ProductMaterialDetailsMapping } from "./ProductMaterialDetailsMapping";
 import { User } from "./User";
 
-@Index("view_user_fk", ["userId"], {})
-@Index("product_material_fk", ["productMaterialId"], {})
-@Entity("view_cart", { schema: "jwellery" })
-export class ViewCart {
+@Index("order_user_fk", ["userId"], {})
+@Entity("user_order_history", { schema: "jwellery" })
+export class UserOrderHistory {
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
@@ -21,6 +19,9 @@ export class ViewCart {
 
   @Column("int", { name: "product_material_id" })
   productMaterialId: number;
+
+  @Column("int", { name: "product_transcation_id" })
+  productTranscationId: number;
 
   @Column("timestamp", {
     name: "created_on",
@@ -40,15 +41,7 @@ export class ViewCart {
   @Column("timestamp", { name: "deleted_on", nullable: true })
   deletedOn: Date | null;
 
-  @ManyToOne(
-    () => ProductMaterialDetailsMapping,
-    (productMaterialDetailsMapping) => productMaterialDetailsMapping.viewCarts,
-    { onDelete: "NO ACTION", onUpdate: "NO ACTION" }
-  )
-  @JoinColumn([{ name: "product_material_id", referencedColumnName: "id" }])
-  productMaterial: ProductMaterialDetailsMapping;
-
-  @ManyToOne(() => User, (user) => user.viewCarts, {
+  @ManyToOne(() => User, (user) => user.userOrderHistories, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
   })

@@ -4,12 +4,10 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Material } from "./Material";
 import { Product } from "./Product";
-import { ViewCart } from "./ViewCart";
 
 @Index("material_fk", ["materialId"], {})
 @Index("product_fk", ["productId"], {})
@@ -55,7 +53,4 @@ export class ProductMaterialMapping {
   })
   @JoinColumn([{ name: "product_id", referencedColumnName: "id" }])
   product: Product;
-
-  @OneToMany(() => ViewCart, (viewCart) => viewCart.productMaterial)
-  viewCarts: ViewCart[];
 }

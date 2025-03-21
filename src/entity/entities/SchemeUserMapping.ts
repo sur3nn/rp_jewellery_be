@@ -40,6 +40,9 @@ export class SchemeUserMapping {
   @Column("timestamp", { name: "deleted_on", nullable: true })
   deletedOn: Date | null;
 
+  @Column("json", { name: "payment_details", nullable: true })
+  paymentDetails: object | null;
+
   @OneToMany(
     () => SchemeTranscationUserMapping,
     (schemeTranscationUserMapping) =>
