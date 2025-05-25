@@ -1,7 +1,11 @@
-import { Body, Get, JsonController, Post, QueryParam, Res } from "routing-controllers";
+import { Body, Get, JsonController, Post, QueryParam, Res, UploadedFile  } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { Service } from "typedi";
-
+import multer from "multer";
+const storage = multer.memoryStorage();
+const uploadOptions = {
+  storage: storage
+};
 
 @Service()
 @JsonController("/api/home")
@@ -89,13 +93,17 @@ const data:any = await fetch("https://www.goldapi.io/api/XAG/INR", requestOption
 @Post('/add-product')
 public async addproduct(
     @Res() res : any,
-    @Body() reqBody : any
+    @Body() req: any,
+     @UploadedFile('image', { options: uploadOptions }) file: Express.Multer.File,
 ){
     try {
-        if(!reqBody.product || !reqBody.material){
+        const reqBody = JSON.parse(req.reqBodys);
+         console.log("reqBody",reqBody,file);
+         
+        if(!reqBody.product || !reqBody.material || !file){
             return res.status(404).json({message: "Request body is missing or malformed."})
         }
-        const data = await this.homeLogic.addProduct(reqBody)
+        const data = await this.homeLogic.addProduct(reqBody,file)
         return res.status(200).json({message : "Product Added Successfully"})
     } catch (error) {
         return res.status(500).json({message : "Internal Server Error",error : error})

@@ -46,7 +46,7 @@ export class HomeLogic{
         }
     }
 
-    public async addProduct(payload : any){
+    public async addProduct(payload : any,file : any){
         try{
             const productMaterialId = await this.getProductMaterialId(payload.product,payload.material);
             console.log("data",productMaterialId);
@@ -64,6 +64,8 @@ export class HomeLogic{
             productDetails.gstPercentage = 18
             productDetails.grandTotal = (payload.grandTotal + 250 + 4000 ) * 1.8
             productDetails.createdBy = 1;
+            productDetails.createdOn = new Date();
+            productDetails.image = file.buffer;
             console.log("res",productDetails)
             await AppDataSource.manager.save(productDetails);
 

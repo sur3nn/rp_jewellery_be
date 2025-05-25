@@ -28,6 +28,7 @@ export class ViewCartController extends BaseController {
        @Get('/view-cart')
     public async viewCart(@Req() req: any, @Res() res: any,@QueryParam('userId') userId : number,) {
         try {
+            console.log(userId);
            var data = await this.cartLogic.viewCart(userId);
             return res.status(200).json({ data : data});
         } catch (error) {

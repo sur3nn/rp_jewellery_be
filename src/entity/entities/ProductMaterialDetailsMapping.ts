@@ -72,6 +72,9 @@ export class ProductMaterialDetailsMapping {
   })
   anticColor: number | null;
 
+  @Column("longblob", { name: "image", nullable: true })
+image: Buffer | null;
+
   @OneToMany(() => ViewCart, (viewCart) => viewCart.productMaterial)
   viewCarts: ViewCart[];
 }
