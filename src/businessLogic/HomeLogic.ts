@@ -32,11 +32,11 @@ export class HomeLogic{
         try {
             const data = await AppDataSource.manager.query(
                 `
-                    select pmdm.name ,pmdm.stock ,pmdm.size ,pmdm.descrption ,pmdm.metal ,pmdm.purity ,pmdm.stone_amount ,making_changes_amount ,gst_percentage ,grand_total,pmdm.product_amount,pmdm.id as product_details_id
+                       select pmdm.name ,pmdm.stock ,pmdm.size ,pmdm.descrption ,pmdm.metal ,pmdm.purity ,pmdm.stone_amount ,making_changes_amount ,gst_percentage ,grand_total,pmdm.product_amount,pmdm.id as product_details_id
                     from product_material_mapping pmm 
                     join product_material_details_mapping pmdm 
                     on PMM.id = PMDM.product_material_id 
-                    where pmm.id = ${productId};
+                    where case when ${productId} != 0 then pmm.id = ${productId} else true end;
                 `
             )
             return data
