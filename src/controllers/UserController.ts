@@ -32,7 +32,7 @@ export class UserController extends BaseController{
         
         const otp = await this.otpLogic.generatedOtpMail(reqbody.emailId);
         await this.userLogic.saveOtp(otp,reqbody.emailId);
-        await this.userLogic.notifacttion(reqbody.fcmToken,title,body);
+        // await this.userLogic.notifacttion(reqbody.fcmToken,title,body);
         return res.status(200).json({message : "otp sent Sucessfully"})
         }else{
             return res.status(404).json({message : "Invalid email or password"}) 

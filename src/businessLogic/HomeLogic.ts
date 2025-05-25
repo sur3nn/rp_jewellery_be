@@ -63,7 +63,7 @@ export class HomeLogic{
             productDetails.gstPercentage = 18
             productDetails.grandTotal = (payload.grandTotal + 250 + 4000 ) * 1.8
             productDetails.createdBy = 1;
-
+            console.log("res",productDetails)
             await AppDataSource.manager.save(productDetails);
 
             return productDetails;
