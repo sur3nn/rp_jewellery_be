@@ -36,7 +36,8 @@ export class HomeLogic{
                     from product_material_mapping pmm 
                     join product_material_details_mapping pmdm 
                     on PMM.id = PMDM.product_material_id 
-                    where case when ${productId} != 0 then pmm.id = ${productId} else true end;
+                    where case when ${productId} != 0 then pmm.id = ${productId} else true end
+                    limit 30;
                 `
             )
             return data
