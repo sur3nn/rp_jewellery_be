@@ -19,7 +19,7 @@ export class GoldScheme {
   createdOn: Date;
 
   @Column("bigint", { name: "created_by" })
-  createdBy: string;
+  createdBy: number;
 
   @Column("timestamp", { name: "updated_on", nullable: true })
   updatedOn: Date | null;

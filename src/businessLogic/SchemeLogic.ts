@@ -26,6 +26,8 @@ export class SchemeLogic{
             const goldScheme = new GoldScheme();
             goldScheme.name = reqbody.schemeName
             goldScheme.amount = reqbody.amount
+            goldScheme.createdBy = 1
+            goldScheme.createdOn = new Date();
            await AppDataSource.manager.save(goldScheme);
         } catch (error) {
             throw error;
