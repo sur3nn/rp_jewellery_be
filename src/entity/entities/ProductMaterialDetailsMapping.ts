@@ -33,16 +33,16 @@ export class ProductMaterialDetailsMapping {
   purity: string | null;
 
   @Column("bigint", { name: "stone_amount" })
-  stoneAmount: string;
+  stoneAmount: number;
 
   @Column("bigint", { name: "making_changes_amount" })
-  makingChangesAmount: string;
+  makingChangesAmount: number;
 
   @Column("float", { name: "gst_percentage", precision: 12 })
   gstPercentage: number;
 
   @Column("bigint", { name: "grand_total" })
-  grandTotal: string;
+  grandTotal: number;
 
   @Column("timestamp", {
     name: "created_on",
@@ -51,7 +51,7 @@ export class ProductMaterialDetailsMapping {
   createdOn: Date;
 
   @Column("bigint", { name: "created_by" })
-  createdBy: string;
+  createdBy: number;
 
   @Column("timestamp", { name: "updated_on", nullable: true })
   updatedOn: Date | null;
@@ -70,7 +70,7 @@ export class ProductMaterialDetailsMapping {
     nullable: true,
     default: () => "'0'",
   })
-  anticColor: string | null;
+  anticColor: number | null;
 
   @OneToMany(() => ViewCart, (viewCart) => viewCart.productMaterial)
   viewCarts: ViewCart[];

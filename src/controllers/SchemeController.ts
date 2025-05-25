@@ -46,7 +46,7 @@ export class SchemeController extends BaseController{
                 return res.status(404).json({ message: "User Scheme Already Exist" })
             }
             const data = await this.schemeLogic.schemeUser(reqbody);
-            return data;
+            return res.status(200).json({message : "User Scheme Created Succesfully"});
         } catch (error) {
             return res.status(500).json({message : "Internal Server Error",error : error})
         }
@@ -77,7 +77,7 @@ export class SchemeController extends BaseController{
     ){
         try {
             const data = await this.schemeLogic.userSchemeData(userId);
-            return res.status(200).json({data : data})
+            return res.status(200).json({data : data || null})
         } catch (error) {
             return res.status(500).json({message : "Internal Server Error",error : error})
         }

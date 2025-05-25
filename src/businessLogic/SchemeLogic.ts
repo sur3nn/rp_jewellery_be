@@ -13,8 +13,7 @@ export class SchemeLogic{
             from gold_scheme gs ;
             `
           ) 
-          console.log("hi bro0,",data);
-          console.log("hi bro0,");
+
           
           
           return data;

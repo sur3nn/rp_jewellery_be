@@ -1,5 +1,6 @@
 import { Service } from "typedi";
 import { AppDataSource } from "../typeorm";
+import { ProductMaterialDetailsMapping } from "../entity/entities/ProductMaterialDetailsMapping";
 
 @Service()
 export class HomeLogic{
@@ -43,4 +44,46 @@ export class HomeLogic{
             throw error
         }
     }
+
+    public async addProduct(payload : any){
+        try{
+            const productMaterialId = await this.getProductMaterialId(payload.product,payload.material);
+            console.log("data",productMaterialId);
+            const productDetails = new ProductMaterialDetailsMapping();
+            productDetails.productMaterialId = productMaterialId
+            productDetails.name = payload.descrption
+            productDetails.descrption =  payload.descrption
+            productDetails.anticColor = 0
+            productDetails.stock = payload.stock 
+            productDetails.productAmount = payload.grandTotal
+            productDetails.size = payload.size
+            productDetails.purity = payload.purity
+            productDetails.stoneAmount = 250    
+            productDetails.makingChangesAmount = 4000  
+            productDetails.gstPercentage = 18
+            productDetails.grandTotal = (payload.grandTotal + 250 + 4000 ) * 1.8
+            productDetails.createdBy = 1;
+
+            await AppDataSource.manager.save(productDetails);
+
+            return productDetails;
+
+        }catch(error){
+            throw error;
+        }
+    }
+    public async getProductMaterialId(product : number,material : number){
+        try{
+            const data = await AppDataSource.manager.query(`
+                select pmm.id
+                from product_material_mapping pmm 
+                where pmm.product_id  = ${product} and pmm.material_id = ${material} and pmm.deleted_on is null;
+                `)
+                console.log(data)
+                return data[0].id;
+        }catch(error){
+            throw error;
+        }
+    }
+
 }
