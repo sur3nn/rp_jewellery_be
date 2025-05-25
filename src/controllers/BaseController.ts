@@ -3,6 +3,7 @@ import { UserLogic } from "../businessLogic/UserLogic";
 import { OtpLogic } from "../businessLogic/OtpLogic";
 import { HomeLogic } from "../businessLogic/HomeLogic";
 import { SchemeLogic } from "../businessLogic/SchemeLogic";
+import { ViewCartLogic } from "../businessLogic/ViewCartLogic";
 
 @Service()
 export class BaseController{
@@ -17,4 +18,7 @@ export class BaseController{
 
     @Inject()
     protected schemeLogic :SchemeLogic
+
+    @Inject()
+    protected cartLogic :ViewCartLogic
 }
