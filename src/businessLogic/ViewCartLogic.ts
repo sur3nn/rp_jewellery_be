@@ -10,7 +10,7 @@ public async viewCart(userId : number){
         try {
             const data = await AppDataSource.query(
                 ` 
-                 select  pmdm.descrption , (pmdm.grand_total * vc.quantity) AS total_price ,vc.quantity 
+                 select  pmdm.name , (pmdm.grand_total * vc.quantity) AS total_price ,vc.quantity 
                  from view_cart vc 
                  join product_material_details_mapping pmdm 
                   on pmdm.id = vc.product_material_id and pmdm.deleted_on is null

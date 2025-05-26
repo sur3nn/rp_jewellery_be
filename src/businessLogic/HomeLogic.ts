@@ -48,6 +48,7 @@ export class HomeLogic{
 
     public async addProduct(payload : any,file : any){
         try{
+            const base = Buffer.from(file).toString('base64');
             const productMaterialId = await this.getProductMaterialId(payload.product,payload.material);
             console.log("data",productMaterialId);
             const productDetails = new ProductMaterialDetailsMapping();
