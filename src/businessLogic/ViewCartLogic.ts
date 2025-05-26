@@ -3,6 +3,7 @@ import { Product } from "../entity/entities/Product";
 import { ViewCart } from "../entity/entities/ViewCart";
 import { AppDataSource } from "../typeorm";
 import { ProductMaterialMapping } from "../entity/entities/ProductMaterialMapping";
+import { ProductMaterialDetailsMapping } from "../entity/entities/ProductMaterialDetailsMapping";
 
 @Service()
 export class ViewCartLogic {
@@ -29,7 +30,7 @@ public async viewCart(userId : number){
      public async existingProduct(productId: number) {
         try {
 
-            const existingProduct = await AppDataSource.manager.findOne(ProductMaterialMapping, {
+            const existingProduct = await AppDataSource.manager.findOne(ProductMaterialDetailsMapping, {
                 where: {
                     id: productId,
                     deletedOn : null
