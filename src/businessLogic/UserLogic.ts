@@ -16,7 +16,7 @@ export class UserLogic{
                        emailId : emailId,
                        password : password
                    },
-                   select : ['uniqueKey']
+                   select : ['uniqueKey','firstName']
                }
             )
             console.log("user",data);
@@ -44,7 +44,7 @@ export class UserLogic{
                       emailId : emailId,
                       otp : otp
                   },
-                  select : ['id']
+                  select : ['id','firstName']
               }
            )
            console.log("user",data);

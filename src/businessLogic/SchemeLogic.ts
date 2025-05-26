@@ -69,15 +69,15 @@ export class SchemeLogic{
     }
     public async validateSchemeUser(userId : number){
         try {
-            const data = await AppDataSource.manager.findOne(SchemeUserMapping,
-                {
-                    where : {
-                        userId : userId
-                    }
-                }
-                
-            )
-            return data;
+             const data = await AppDataSource.manager.query(
+            `
+            select *
+from scheme_user_mapping sum2 
+where sum2.user_id  = ${userId} and sum2.deleted_on is null;
+            `
+          )
+            console.log(data)
+            return data[0];
         } catch (error) {
             throw error;
         }
