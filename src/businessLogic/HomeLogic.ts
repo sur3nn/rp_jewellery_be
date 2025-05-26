@@ -65,7 +65,7 @@ export class HomeLogic{
             productDetails.stoneAmount = 250    
             productDetails.makingChangesAmount = 4000  
             productDetails.gstPercentage = 18
-            productDetails.grandTotal = (payload.grandTotal + 250 + 4000 ) * 1.8
+            productDetails.grandTotal = (parseInt(payload.grandTotal) + 250 + 4000 ) * 1.8
             productDetails.createdBy = 1;
             productDetails.createdOn = new Date();
             productDetails.image = file.buffer;
