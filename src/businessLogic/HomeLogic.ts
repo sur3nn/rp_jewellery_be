@@ -32,7 +32,7 @@ export class HomeLogic{
         try {
             const data = await AppDataSource.manager.query(
                 `
-                    select pmdm.name ,pmdm.stock ,pmdm.size ,pmdm.name as descrption ,pmdm.metal ,pmdm.purity ,pmdm.stone_amount ,making_changes_amount ,gst_percentage ,grand_total,pmdm.product_amount,pmdm.id as product_details_id,pmdm.id as productMaterialId,TO_BASE64(pmdm.image) 
+                    select pmdm.name ,pmdm.stock ,pmdm.size ,pmdm.name as descrption ,pmdm.metal ,pmdm.purity ,pmdm.stone_amount ,making_changes_amount ,gst_percentage ,grand_total,pmdm.product_amount,pmdm.id as product_details_id,pmdm.id as productMaterialId,TO_BASE64(pmdm.image) as image
                     from product_material_mapping pmm 
                     join product_material_details_mapping pmdm 
                     on PMM.id = PMDM.product_material_id 
