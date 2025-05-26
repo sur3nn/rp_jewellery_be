@@ -32,11 +32,12 @@ export class HomeLogic{
         try {
             const data = await AppDataSource.manager.query(
                 `
-                       select pmdm.name ,pmdm.stock ,pmdm.size ,pmdm.descrption ,pmdm.metal ,pmdm.purity ,pmdm.stone_amount ,making_changes_amount ,gst_percentage ,grand_total,pmdm.product_amount,pmdm.id as product_details_id,pmm.id as productMaterialId
+                    select pmdm.name ,pmdm.stock ,pmdm.size ,pmdm.name as descrption ,pmdm.metal ,pmdm.purity ,pmdm.stone_amount ,making_changes_amount ,gst_percentage ,grand_total,pmdm.product_amount,pmdm.id as product_details_id,pmdm.id as productMaterialId,TO_BASE64(pmdm.image) as image
                     from product_material_mapping pmm 
                     join product_material_details_mapping pmdm 
                     on PMM.id = PMDM.product_material_id 
                     where case when ${productId} != 0 then pmm.id = ${productId} else true end
+                    order by pmdm.id desc
                     limit 30;
                 `
             )
@@ -48,7 +49,8 @@ export class HomeLogic{
 
     public async addProduct(payload : any,file : any){
         try{
-            const base = Buffer.from(file).toString('base64');
+            const base : string= Buffer.from(file.buffer).toString('base64');
+            console.log(base);
             const productMaterialId = await this.getProductMaterialId(payload.product,payload.material);
             console.log("data",productMaterialId);
             const productDetails = new ProductMaterialDetailsMapping();
