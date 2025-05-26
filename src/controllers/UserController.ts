@@ -18,9 +18,9 @@ export class UserController extends BaseController{
 
     ){
        try {
-        if(!reqbody.emailId || !reqbody.password || !reqbody.fcmToken){
-            return res.status(404).json({message : "username or password is missing"})
-        }
+        // if(!reqbody.emailId || !reqbody.password || !reqbody.fcmToken){
+        //     return res.status(404).json({message : "username or password is missing"})
+        // }
         
         const validateUserData : any = await this.userLogic.validateUser(reqbody.emailId,reqbody.password);
         console.log(validateUserData);
@@ -59,7 +59,7 @@ export class UserController extends BaseController{
             
             
             if(data != null){
-            return res.status(200).json({message : "Otp Verifed Successfully",userId : data.id})
+            return res.status(200).json({message : "Otp Verifed Successfully",userId : data.id,name : data.firstName,profile:data.firstName[0].toUpperCase() +""+ data.firstName[1].toUpperCase()})
             }else{
                 return res.status(404).json({message : "Invalid Otp"})
             }
