@@ -130,6 +130,7 @@ public async createUser(reqbody : any){
   try {
     const query = `
       SELECT o.id, DATE_FORMAT(CONVERT_TZ(o.created_on, '+00:00', '+05:30'), '%e %b %l:%i %p') AS orderDate,o.order_status,
+    u.first_name AS user_name,
              JSON_ARRAYAGG(
                JSON_OBJECT(
                  'product_name', pmdm.name,
@@ -143,7 +144,9 @@ public async createUser(reqbody : any){
       INNER JOIN view_cart vc
         ON vc.product_material_id = pmdm.product_material_id
         AND vc.deleted_on IS NULL
-      WHERE o.user_id = ${userId}
+        left JOIN user u
+        ON u.id = o.user_id
+       where case when  ${userId} != 0 then o.user_id=  ${userId} else true end
         AND o.deleted_on IS NULL
       GROUP BY o.id;
     `;
@@ -162,6 +165,7 @@ public async createUser(reqbody : any){
       }
 
       return {
+        user_name: item.user_name,
         order_id: item.id,
         order_date: item.orderDate,
         order_status: item.order_status,
