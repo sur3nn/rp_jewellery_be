@@ -125,5 +125,37 @@ public async createUser(reqbody : any){
         throw error;
     }
 }
- 
+ public async orderUser(userId : any){
+    try {
+        const data  = await AppDataSource.manager.query(`
+          select o.id ,
+ JSON_ARRAYAGG(
+        JSON_OBJECT(
+        'product_name',pmdm.name ,
+        'total',pmdm.grand_total ,
+        'image',pmdm.image 
+                  )
+    ) AS order_details
+from order o 
+left join product_material_details_mapping pmdm 
+ ON JSON_CONTAINS(o.product_details_mapping_id ,CAST(pmdm.id AS json))
+inner join view_cart vc 
+on vc.product_material_id = pmdm.product_material_id and vc.deleted_on is null
+where o.user_id = ${userId} and o.deleted_on is null
+group by o.id;
+
+    }
+            `)
+        return data;
+    } catch (error) {
+        throw error
+    }
+}
+public async orderSave(reqbody : any){
+    try{
+
+    }catch (error) {
+
+    }
+}
 }

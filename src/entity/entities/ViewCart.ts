@@ -41,7 +41,7 @@ export class ViewCart {
   deletedOn: Date | null;
 
   @Column("int", { name: "quantity", nullable: true })
-quantity: number | null;
+  quantity: number | null;
 
   @ManyToOne(
     () => ProductMaterialDetailsMapping,

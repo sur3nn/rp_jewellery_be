@@ -138,4 +138,29 @@ export class UserController extends BaseController{
         return res.status(500).json({message : "Internal Server Error",error : error})
       }
     }
+
+     @Get('/order-user')
+    public async orderUserDetails(
+        @QueryParam("userId") userId : number,
+        @Res() res : any
+    ){
+      try {
+        const otp = await this.userLogic.orderUser(userId);
+      return res.status(200).json({message : "otp sent in mail Successfully"})
+      } catch (error) {
+        return res.status(500).json({message : "Internal Server Error",error : error})
+      }
+    }
+      @Get('/order-add')
+    public async orderSave(
+        @Body() reqbody :any,
+        @Res() res : any
+    ){
+      try {
+        const otp = await this.userLogic.orderUser(reqbody);
+      return res.status(200).json({message : "otp sent in mail Successfully"})
+      } catch (error) {
+        return res.status(500).json({message : "Internal Server Error",error : error})
+      }
+    }
 }
