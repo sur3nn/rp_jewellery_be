@@ -3,6 +3,7 @@ import { AppDataSource } from "../typeorm";
 import { User } from "../entity/entities/User";
 import { admin } from "../server";
 import { v4 as uuidV4} from 'uuid'
+import { Order } from "../entity/entities/Order";
 
 @Service()
 export class UserLogic{
@@ -125,37 +126,75 @@ public async createUser(reqbody : any){
         throw error;
     }
 }
- public async orderUser(userId : any){
-    try {
-        const data  = await AppDataSource.manager.query(`
-          select o.id ,
- JSON_ARRAYAGG(
-        JSON_OBJECT(
-        'product_name',pmdm.name ,
-        'total',pmdm.grand_total ,
-        'image',pmdm.image 
-                  )
-    ) AS order_details
-from order o 
-left join product_material_details_mapping pmdm 
- ON JSON_CONTAINS(o.product_details_mapping_id ,CAST(pmdm.id AS json))
-inner join view_cart vc 
-on vc.product_material_id = pmdm.product_material_id and vc.deleted_on is null
-where o.user_id = ${userId} and o.deleted_on is null
-group by o.id;
+ public async orderUser(userId: any) {
+  try {
+    const query = `
+      SELECT o.id, DATE_FORMAT(CONVERT_TZ(o.created_on, '+00:00', '+05:30'), '%e %b %l:%i %p') AS orderDate,o.order_status,
+             JSON_ARRAYAGG(
+               JSON_OBJECT(
+                 'product_name', pmdm.name,
+                 'total', pmdm.grand_total,
+                 'image', pmdm.image
+               )
+             ) AS order_details
+      FROM \`order\` o
+      LEFT JOIN product_material_details_mapping pmdm
+        ON JSON_CONTAINS(o.product_details_mapping_id, CAST(pmdm.id AS JSON))
+      INNER JOIN view_cart vc
+        ON vc.product_material_id = pmdm.product_material_id
+        AND vc.deleted_on IS NULL
+      WHERE o.user_id = ${userId}
+        AND o.deleted_on IS NULL
+      GROUP BY o.id;
+    `;
 
-    }
-            `)
-        return data;
-    } catch (error) {
-        throw error
-    }
+    let data = await AppDataSource.manager.query(query);
+
+    return data.map(item => {
+      let orderDetails = [];
+      try {
+        console.log(item.order_details);
+         orderDetails = [...item.order_details]
+         console.log("ab",orderDetails);
+
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
+
+      return {
+        order_id: item.id,
+        order_date: item.orderDate,
+        order_status: item.order_status,
+        order_details: orderDetails
+      };
+    });
+  } catch (error) {
+    throw error;
+  }
 }
+
 public async orderSave(reqbody : any){
     try{
-
+        const order = new Order();
+        order.userId = reqbody.userId;
+        order.orderStatus = "Pending";
+        order.productDetailsMappingId = reqbody.productDetailsMappingId;
+        order.createdBy = "1";
+        await AppDataSource.manager.save(order);
+        return order.id;
     }catch (error) {
-
+            throw error;
+    }
+}
+public async orderUpdate(orderId : any,orderStatus : any){
+    try{
+         const user = AppDataSource.getRepository(Order)
+        const update = user.update({id : orderId},{
+            orderStatus : orderStatus
+        })
+        return update
+    }catch (error) {
+            throw error;
     }
 }
 }

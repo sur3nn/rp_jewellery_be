@@ -1,4 +1,4 @@
-import { Body, Get, JsonController, Post, Put, QueryParam, Req, Res } from "routing-controllers";
+import { Body, Get, JsonController, Patch, Post, Put, QueryParam, Req, Res } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { Service } from "typedi";
 import jwt from "jsonwebtoken";
@@ -145,20 +145,34 @@ export class UserController extends BaseController{
         @Res() res : any
     ){
       try {
-        const otp = await this.userLogic.orderUser(userId);
-      return res.status(200).json({message : "otp sent in mail Successfully"})
+        const data = await this.userLogic.orderUser(userId);
+      return res.status(200).json({data : data })
       } catch (error) {
         return res.status(500).json({message : "Internal Server Error",error : error})
       }
     }
-      @Get('/order-add')
+      @Post('/order-add')
     public async orderSave(
         @Body() reqbody :any,
         @Res() res : any
     ){
       try {
-        const otp = await this.userLogic.orderUser(reqbody);
-      return res.status(200).json({message : "otp sent in mail Successfully"})
+        const otp = await this.userLogic.orderSave(reqbody);
+      return res.status(200).json({message : "Order Created Successfully"})
+      } catch (error) {
+        return res.status(500).json({message : "Internal Server Error",error : error})
+      }
+    }
+    
+     @Patch('/order-update')
+    public async orderUpdate(
+        @QueryParam("orderId") orderId : number,
+        @QueryParam("orderStatus") orderStatus : string,
+        @Res() res : any
+    ){
+      try {
+        const data = await this.userLogic.orderUpdate(orderId,orderStatus);
+      return res.status(200).json({message : "Order Updated Successfully"})
       } catch (error) {
         return res.status(500).json({message : "Internal Server Error",error : error})
       }
