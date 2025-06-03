@@ -28,20 +28,28 @@ export class HomeLogic{
         }
     }
 
-    public async productDetails(productId : number){
+    public async productDetails(productId : number,isPrice : string){
         try {
-            const data = await AppDataSource.manager.query(
+            let data = 
                 `
                     select pmdm.name ,pmdm.stock ,pmdm.size ,pmdm.name as descrption ,pmdm.metal ,pmdm.purity ,pmdm.stone_amount ,making_changes_amount ,gst_percentage ,grand_total,pmdm.product_amount,pmdm.id as product_details_id,pmdm.id as productMaterialId,TO_BASE64(pmdm.image) as image
                     from product_material_mapping pmm 
                     join product_material_details_mapping pmdm 
                     on PMM.id = PMDM.product_material_id 
                     where case when ${productId} != 0 then pmm.id = ${productId} else true end
-                    order by pmdm.id desc
-                    limit 30;
                 `
-            )
-            return data
+        if( isPrice == 'low'){
+            data += `order by  pmdm.grand_total asc;`
+        }
+        else if(isPrice == 'high'){
+            data += `order by  pmdm.grand_total desc;`
+        }
+        else{
+          data +=   `order by pmdm.id desc;`
+        }
+            const productDetails = await AppDataSource.manager.query(data);
+
+            return productDetails;
         } catch (error) {
             throw error
         }

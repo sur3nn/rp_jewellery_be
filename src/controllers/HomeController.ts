@@ -25,10 +25,11 @@ public async productList(
 @Get('/product-details')
 public async productDetails(
     @QueryParam('productId') productId : number,
+    @QueryParam('isPrice') isPrice : string,
     @Res() res : any
 ){
     try {
-        const data = await this.homeLogic.productDetails(productId);
+        const data = await this.homeLogic.productDetails(productId,isPrice);
         return res.status(200).json({data : data})
     } catch (error) {
         return res.status(500).json({message : "Internal Server Error",error : error})
